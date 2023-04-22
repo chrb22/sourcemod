@@ -274,6 +274,10 @@ bool UpdateRegisterArgumentSizes(CHook* pDetour, HookSetup *setup)
 		if (argTypes[i].custom_register == None)
 			continue;
 
+		// Stack variable param
+		if (Stack_Min < argTypes[i].custom_register && argTypes[i].custom_register <= Stack_Max)
+			continue;
+
 		CRegister *reg = pDetour->m_pRegisters->GetRegister(argTypes[i].custom_register);
 		// That register can't be handled yet.
 		if (!reg)

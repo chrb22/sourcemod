@@ -316,7 +316,10 @@ cell_t Native_AddParam(IPluginContext *pContext, const cell_t *params)
 		if (info.custom_register == None && custom_register != DHookRegister_Default)
 			return pContext->ThrowNativeError("Unhandled DHookRegister %d", params[5]);
 
-		if (info.custom_register != None && info.type == HookParamType_Object)
+		if (Stack_Min <= info.custom_register && info.custom_register < Stack_Max && setup->callConv != CallConv_INSTRUCTION)
+			return pContext->ThrowNativeError("Can only use stack offsets with instruction hooks.");
+
+		if (info.custom_register != None && info.custom_register >= 0 && info.type == HookParamType_Object)
 			return pContext->ThrowNativeError("Can't pass an object in a register.");
 	}
 	else

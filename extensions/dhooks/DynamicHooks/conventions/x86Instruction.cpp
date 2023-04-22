@@ -100,6 +100,16 @@ void* x86Instruction::GetArgumentPtr(unsigned int iIndex, CRegisters* pRegisters
 	if (m_vecArgTypes[iIndex].custom_register == None)
 		return NULL;
 
+	int iValue = m_vecArgTypes[iIndex].custom_register;
+	if (Stack_Min <= iValue && iValue < Stack_Max) // range check in case the negative value is accidental
+	{
+		CRegister* pEBP = pRegisters->GetRegister(EBP);
+		if (!pEBP)
+			return NULL;
+
+		return pEBP->GetValue<uint8_t*>() + (iValue - Stack);
+	}
+
 	CRegister *pRegister = pRegisters->GetRegister(m_vecArgTypes[iIndex].custom_register);
 	if (!pRegister)
 		return NULL;

@@ -183,6 +183,9 @@ enum DHookRegister
 
 	// 80-bit FPU registers
 	DHookRegister_ST0,
+
+	// Stack offset relative to EBP, e.g. DHookRegister_Stack - 0x3c for the variable at EBP - 0x3c.
+	DHookRegister_Stack = -1024,
 };
 
 typeset ListenCB

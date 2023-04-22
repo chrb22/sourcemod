@@ -49,8 +49,13 @@
 // ============================================================================
 enum Register_t
 {
+	// Custom stack offset (for instruction hooks)
+	Stack = -1024,
+	Stack_Min = -1024*1024,
+	Stack_Max = -512,
+
 	// No register at all.
-	None,
+	None = 0,
 
 	// ========================================================================
 	// >> 8-bit General purpose registers

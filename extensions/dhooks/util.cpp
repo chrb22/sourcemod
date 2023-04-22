@@ -232,5 +232,9 @@ Register_t DynamicHooks_ConvertRegisterFrom(PluginRegister reg)
 		return ST0;
 	}
 
+	int value = reg;
+	if ((int)Stack_Min <= value && value < (int)Stack_Max)
+		return (Register_t)value;
+
 	return None;
 }

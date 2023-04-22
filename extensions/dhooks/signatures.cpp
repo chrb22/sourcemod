@@ -364,6 +364,24 @@ SMCResult SignatureGameConfig::ReadSMC_KeyValue(const SMCStates *states, const c
 				return SMCResult_HaltFail;
 			}
 		}
+		else if (!strcmp(key, "stack"))
+		{
+			if (g_CurrentSignature->callConv != CallConv_INSTRUCTION)
+			{
+				smutils->LogError(myself, "Can only use stack offsets with instruction hooks: line: %i col: %i", states->line, states->col);
+				return SMCResult_HaltFail;
+			}
+
+			int stackOffset = Register_t::Stack + strtol(value, NULL, 0);
+
+			if (stackOffset == Register_t::Stack || !( Register_t::Stack_Min <= stackOffset && stackOffset < Register_t::Stack_Max ))
+			{
+				smutils->LogError(myself, "Invalid stack offset \"%s\": line: %i col: %i", value, states->line, states->col);
+				return SMCResult_HaltFail;
+			}
+
+			g_CurrentArgumentInfo.info.custom_register = (Register_t)stackOffset;
+		}
 		else
 		{
 			smutils->LogError(myself, "Unknown key in Functions section \"%s\": line: %i col: %i", key, states->line, states->col);
